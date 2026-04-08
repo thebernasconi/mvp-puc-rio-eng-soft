@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previsor de Faixa Salarial - Devs</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; background: #f4f4f9; }
+        h1 { color: #333; text-align: center; }
+        form { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
+        button { width: 100%; padding: 15px; background: #4CAF50; color: white; font-size: 18px; border: none; border-radius: 5px; margin-top: 20px; cursor: pointer; }
+        button:hover { background: #45a049; }
+        #result { margin-top: 20px; padding: 15px; border-radius: 5px; font-size: 18px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>🔮 Previsor de Faixa Salarial de Desenvolvedores</h1>
+    <form id="predictForm">
+        <label>Experiência (anos):</label>
+        <input type="number" name="experience" value="10" required>
+
+        <label>País:</label>
+        <input type="text" name="country" value="Brazil" required>
+
+        <label>Educação:</label>
+        <select name="education" required>
+            <option value="Bachelors">Bachelors</option>
+            <option value="Masters">Masters</option>
+            <option value="PhD">PhD</option>
+            <option value="Some College">Some College</option>
+        </select>
+
+        <label>Linguagens (separadas por vírgula):</label>
+        <input type="text" name="languages" value="Python, JavaScript" required>
+
+        <label>Frameworks (separadas por vírgula):</label>
+        <input type="text" name="frameworks" value="Flask, React" required>
+
+        <label>Tamanho da Empresa:</label>
+        <select name="company_size" required>
+            <option value="1-10">1-10</option>
+            <option value="11-50">11-50</option>
+            <option value="51-200">51-200</option>
+            <option value="201-1000">201-1000</option>
+            <option value="1001-5000">1001-5000</option>
+            <option value="5000+">5000+</option>
+        </select>
+
+        <button type="submit">🔍 Prever Faixa Salarial</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('predictForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = 'Calculando...';
+            
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                resultDiv.style.background = '#d4edda';
+                resultDiv.style.color = '#155724';
+                resultDiv.innerHTML = data.message;
+            } else {
+                resultDiv.style.background = '#f8d7da';
+                resultDiv.style.color = '#721c24';
+                resultDiv.innerHTML = data.message;
+            }
+        });
+    </script>
+</body>
+</html>
